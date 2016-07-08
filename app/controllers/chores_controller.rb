@@ -18,7 +18,7 @@ class ChoresController < ProtectedController
   # POST /chores
   # POST /chores.json
   def create
-    @chore = Chore.new(chore_params)
+    @chore = current_user.chores.build(chore_params)
 
     if @chore.save
       render json: @chore, status: :created, location: @chore
@@ -30,7 +30,7 @@ class ChoresController < ProtectedController
   # PATCH/PUT /chores/1
   # PATCH/PUT /chores/1.json
   def update
-    @chore = Chore.find(params[:id])
+    # @chore = Chore.find(params[:id])
 
     if @chore.update(chore_params)
       head :no_content
@@ -50,10 +50,10 @@ class ChoresController < ProtectedController
   private
 
     def set_chore
-      @chore = Chore.find(params[:id])
+      @chore = current_user.chores.find(params[:id])
     end
 
     def chore_params
-      params.require(:chore).permit(:title, :where, :when, :user_id)
+      params.require(:chore).permit(:title, :where, :when)
     end
 end
